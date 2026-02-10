@@ -1,1254 +1,1177 @@
 
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFVT Team Followup - Complete System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
+    <title>Vestige Team Messenger - Girish S</title>
     <style>
-        * { box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); 
-            min-height: 100vh; margin: 0; padding: 20px; 
-            animation: gradientShift 15s ease infinite;
-            background-size: 400% 400%;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        #loginOverlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); 
-            display: flex; align-items: center; justify-content: center; z-index: 2000; 
-        }
-        
-        .login-box { 
-            background: white; padding: 35px; border-radius: 20px; text-align: center; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 320px;
-            animation: fadeInScale 0.5s ease-out;
-        }
-        
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: #000000;
+            color: #ff4444;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .container { 
-            max-width: 1400px; margin: auto; background: white; padding: 30px; 
-            border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
-            position: relative; display: none;
-            animation: slideIn 0.6s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user-profile-bar { 
-            display: flex; align-items: center; justify-content: space-between; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            padding: 15px 25px; border-radius: 15px; margin-bottom: 25px; 
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-            animation: pulse 3s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); }
-            50% { box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5); }
-        }
-        
-        .user-details { display: flex; align-items: center; gap: 15px; }
-        .user-avatar { 
-            width: 50px; height: 50px; 
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); 
-            color: #1a202c; border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; font-weight: 900; font-size: 20px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        }
-        
-        .user-details div { color: white; }
-        
-        .stats-summary { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-            padding: 20px; border-radius: 15px; font-weight: 800; color: white; 
-            margin-bottom: 25px; text-align: center; font-size: 18px;
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-            animation: shimmer 2s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        .header-section { text-align: center; margin-bottom: 30px; }
-        .team-logo { 
-            max-width: 120px; height: auto; border-radius: 15px; margin-bottom: 20px; 
-            border: 3px solid #fbbf24; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
-        }
-        
-        .luxury-gold-title {
-            font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 900; 
-            margin: 0; text-transform: uppercase;
-            background: linear-gradient(45deg, #bf953f 0%, #fcf6ba 20%, #b38728 45%, #fcf6ba 55%, #bf953f 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            filter: drop-shadow(0px 2px 3px #947a39); 
-            animation: lightSweep 3s infinite linear;
-            background-size: 200% auto;
-        }
-
-        @keyframes lightSweep { 
-            0% { background-position: 0% center; } 
-            100% { background-position: 200% center; } 
-        }
-
-        .branding-bar { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); 
-            padding: 15px; border-radius: 15px; margin-top: 40px; 
-            border: 2px solid #ec4899; box-shadow: 0 6px 20px rgba(236, 72, 153, 0.2);
-        }
-        
-        .leader-card-inline { display: flex; align-items: center; gap: 12px; }
-        .profile-circle-small { 
-            width: 70px; height: 70px; border-radius: 50%; 
-            border: 3px solid #ec4899; overflow: hidden; background: #fff; 
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
-        }
-        .profile-circle-small img { width: 100%; height: 100%; object-fit: cover; }
-        .leader-name-small { font-weight: 800; font-size: 16px; margin: 0; color: #1e293b; }
-        .leader-rank-small { font-size: 9px; color: #be185d; font-weight: 800; text-transform: uppercase; }
-        .team-tag { 
-            font-size: 10px; color: #1e293b; font-weight: 700; 
-            background: #fce7f3; padding: 3px 8px; border-radius: 6px; 
-            display: inline-block; margin-top: 3px;
-        }
-        .inline-logo { width: 75px; height: auto; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-
-        .form-section { 
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
-            padding: 25px; border-radius: 15px; border: 2px solid #3b82f6; 
-            margin-bottom: 30px; box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
-        }
-        
-        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        .input-group label { 
-            display: block; font-size: 11px; font-weight: 800; color: #475569; 
-            margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        
-        input, select { 
-            width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 8px; 
-            font-size: 14px; transition: all 0.3s ease;
-        }
-        
-        input:focus, select:focus { 
-            outline: none; border-color: #3b82f6; 
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            transform: scale(1.02);
-        }
-        
-        .add-btn { 
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
-            color: white; border: none; padding: 12px; border-radius: 8px; 
-            font-weight: 700; cursor: pointer; align-self: flex-end;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .add-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); 
-        }
-        
-        /* Enhanced Row Colors with Animation */
-        .high-pv { 
-            background: linear-gradient(90deg, #d1fae5 0%, #a7f3d0 100%) !important; 
-            border-left: 6px solid #10b981; 
-            animation: highlightPulse 2s ease-in-out infinite;
-        } 
-        
-        .low-pv-warning {
-            background: linear-gradient(90deg, #fed7aa 0%, #fdba74 100%) !important;
-            border-left: 6px solid #f97316;
-            animation: warningBlink 2s ease-in-out infinite;
-        }
-        
-        .inactive-warning {
-            background: linear-gradient(90deg, #fecaca 0%, #fca5a5 100%) !important;
-            border-left: 6px solid #ef4444;
-            animation: dangerPulse 2s ease-in-out infinite;
-        }
-        
-        .no-consistency { 
-            background: linear-gradient(90deg, #fee2e2 0%, #fecaca 100%) !important; 
-            border-left: 6px solid #dc2626; 
-            animation: dangerPulse 2s ease-in-out infinite;
-        } 
-        
-        .no-meeting {
-            background: linear-gradient(90deg, #ddd6fe 0%, #c4b5fd 100%) !important;
-            border-left: 6px solid #8b5cf6;
-            animation: reminderBlink 2s ease-in-out infinite;
-        }
-        
-        @keyframes highlightPulse {
-            0%, 100% { box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
-            50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-        }
-        
-        @keyframes warningBlink {
-            0%, 100% { box-shadow: 0 0 0 rgba(249, 115, 22, 0); }
-            50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
-        }
-        
-        @keyframes dangerPulse {
-            0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
-            50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); }
-        }
-        
-        @keyframes reminderBlink {
-            0%, 100% { box-shadow: 0 0 0 rgba(139, 92, 246, 0); }
-            50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-        }
-
-        .action-bar { 
-            display: flex; justify-content: space-between; gap: 15px; 
-            margin-bottom: 20px; flex-wrap: wrap; 
-        }
-        
-        #searchInput { 
-            flex-grow: 1; border: 2px solid #cbd5e0; border-radius: 10px; 
-            padding: 12px 15px; font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        #searchInput:focus {
-            outline: none; border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-        
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        
-        .btn-success { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-            color: white; border: none; padding: 12px 20px; border-radius: 8px; 
-            font-weight: 700; cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-success:hover { transform: translateY(-2px); }
-        
-        .btn-danger { 
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
-            color: white; border: none; padding: 12px 20px; border-radius: 8px; 
-            font-weight: 700; cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-danger:hover { transform: translateY(-2px); }
-        
-        .btn-trash {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            color: white; border: none; padding: 12px 20px; border-radius: 8px;
-            font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-trash:hover { transform: translateY(-2px); }
-        
-        .btn-wa-templates {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white; border: none; padding: 12px 20px; border-radius: 8px;
-            font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-wa-templates:hover { transform: translateY(-2px); }
-        
-        table { 
-            width: 100%; border-collapse: collapse; background: white; 
-            margin-top: 15px; border-radius: 10px; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        th { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            padding: 15px; text-align: left; font-size: 11px; font-weight: 800; 
-            color: white; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        
-        td { 
-            padding: 15px 12px; border-bottom: 1px solid #f1f5f9; 
-            font-size: 13px; transition: all 0.2s ease;
-        }
-        
-        tr:hover td { background-color: #f8fafc; }
-        
-        .wa-link { 
-            color: white; text-decoration: none; font-weight: 700; 
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            padding: 6px 12px; border-radius: 6px; font-size: 11px;
-            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        
-        .wa-link:hover { transform: scale(1.05); }
-        
-        .delete-btn { 
-            color: #ef4444; cursor: pointer; border: none; background: none; 
-            font-size: 20px; transition: all 0.3s ease;
-        }
-        
-        .delete-btn:hover { transform: scale(1.2); }
-        
-        .perm-delete-btn {
-            background: #7f1d1d;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 11px;
-            margin-left: 5px;
-        }
-        
-        .perm-delete-btn:hover {
-            background: #991b1b;
-        }
-        
-        #trashSection { 
-            display: none; 
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); 
-            padding: 20px; border-radius: 15px; margin-bottom: 25px; 
-            border: 3px dashed #f87171; box-shadow: 0 6px 20px rgba(248, 113, 113, 0.2);
-        }
-        
-        .reminder-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            margin-left: 5px;
-            animation: badgePulse 1.5s ease-in-out infinite;
-        }
-        
-        .badge-inactive {
-            background: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #dc2626;
-        }
-        
-        .badge-low-pv {
-            background: #fed7aa;
-            color: #ea580c;
-            border: 1px solid #ea580c;
-        }
-        
-        .badge-no-meeting {
-            background: #e0e7ff;
-            color: #4f46e5;
-            border: 1px solid #4f46e5;
-        }
-        
-        .badge-pv-reminder {
-            background: #fef3c7;
-            color: #92400e;
-            border: 1px solid #f59e0b;
-        }
-        
-        @keyframes badgePulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-        }
-        
-        /* Popup Modal Styles */
-        .modal-overlay {
-            display: none;
+        /* Black screen with network animation overlay */
+        .black-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.8), #000000);
+            z-index: 0;
+            pointer-events: none;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        /* Animated Network Background */
+        .network-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
-        
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s ease;
+
+        .network-background canvas {
+            display: block;
+            opacity: 0.6;
         }
-        
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                0 0 80px rgba(255, 215, 0, 0.1),
+                inset 0 0 100px rgba(255, 255, 255, 0.03);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            animation: glassGlow 4s ease-in-out infinite;
         }
-        
-        .modal-header {
-            font-size: 24px;
-            font-weight: 800;
-            color: #dc2626;
-            margin-bottom: 15px;
+
+        @keyframes glassGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                    0 0 80px rgba(255, 215, 0, 0.1),
+                    inset 0 0 100px rgba(255, 255, 255, 0.03);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 8px 32px 0 rgba(31, 38, 135, 0.5),
+                    0 0 120px rgba(255, 215, 0, 0.3),
+                    inset 0 0 120px rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #DC143C, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .header {
             text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, transparent, #D4AF37, #FFD700, #D4AF37, transparent) 1;
         }
-        
-        .modal-body {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #334155;
-            margin-bottom: 25px;
+
+        .profile-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 4px solid #D4AF37;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.6),
+                0 0 60px rgba(255, 215, 0, 0.3);
+            animation: photoGlow 3s ease-in-out infinite;
         }
-        
-        .modal-btn {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
+
+        @keyframes photoGlow {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 
+                    0 0 30px rgba(212, 175, 55, 0.6),
+                    0 0 60px rgba(255, 215, 0, 0.3);
+                border-color: #D4AF37;
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 
+                    0 0 50px rgba(255, 215, 0, 0.8),
+                    0 0 100px rgba(212, 175, 55, 0.5);
+                border-color: #FFD700;
+            }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            position: relative;
+            background: linear-gradient(
+                to bottom,
+                #ffd700 0%,
+                #ffed4e 10%,
+                #ffed4e 20%,
+                #ffc800 30%,
+                #e6ac00 40%,
+                #b8860b 50%,
+                #8b6914 60%,
+                #6b5410 70%,
+                #4a3c0e 80%,
+                #2d2510 90%,
+                #1a1a0a 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 1px 0 #ccc)
+                    drop-shadow(0 2px 0 #c9c9c9)
+                    drop-shadow(0 3px 0 #bbb)
+                    drop-shadow(0 4px 0 #b9b9b9)
+                    drop-shadow(0 5px 0 #aaa)
+                    drop-shadow(0 6px 1px rgba(0,0,0,.1))
+                    drop-shadow(0 0 5px rgba(0,0,0,.1))
+                    drop-shadow(0 1px 3px rgba(0,0,0,.3))
+                    drop-shadow(0 3px 5px rgba(0,0,0,.2))
+                    drop-shadow(0 5px 10px rgba(0,0,0,.25))
+                    drop-shadow(0 10px 10px rgba(0,0,0,.2))
+                    drop-shadow(0 20px 20px rgba(0,0,0,.15))
+                    drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+            animation: goldShine 3s linear infinite;
+        }
+
+        @keyframes goldShine {
+            0% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5)) brightness(1); }
+            50% { filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.8)) brightness(1.2); }
+            100% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5)) brightness(1); }
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(90deg, #FF6B35, #F7931E, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.4em;
             font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.3));
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .left-panel, .right-panel {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.3),
+                inset 0 0 60px rgba(255, 255, 255, 0.02);
+            animation: panelGlass 4s ease-in-out infinite;
+        }
+
+        @keyframes panelGlass {
+            0%, 100% {
+                background: rgba(255, 255, 255, 0.03);
+                border-color: rgba(255, 255, 255, 0.08);
+                box-shadow: 
+                    0 4px 20px rgba(0, 0, 0, 0.3),
+                    inset 0 0 60px rgba(255, 255, 255, 0.02);
+            }
+            50% {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.12);
+                box-shadow: 
+                    0 4px 20px rgba(0, 0, 0, 0.4),
+                    inset 0 0 80px rgba(255, 255, 255, 0.04);
+            }
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(90deg, #50C878, #40E0D0, #9370DB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, #50C878, #40E0D0, #9370DB) 1;
+            padding-bottom: 10px;
+            filter: drop-shadow(0 0 10px rgba(80, 200, 120, 0.3));
+        }
+
+        .number-input-area {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 10px;
+            color: #E6E6FA;
+            padding: 15px;
+            font-size: 14px;
+            resize: vertical;
+            font-family: 'Cormorant Garamond', serif;
+            animation: borderPulseTextarea 3s ease-in-out infinite;
+        }
+
+        @keyframes borderPulseTextarea {
+            0%, 100% {
+                border-color: rgba(138, 43, 226, 0.4);
+                box-shadow: 0 0 5px rgba(138, 43, 226, 0.3);
+            }
+            50% {
+                border-color: rgba(186, 85, 211, 0.6);
+                box-shadow: 0 0 15px rgba(186, 85, 211, 0.5);
+            }
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #BA55D3;
+            box-shadow: 0 0 20px rgba(186, 85, 211, 0.6);
+            animation: none;
+        }
+
+        .helper-text {
+            color: #40E0D0;
+            font-size: 12px;
+            margin-top: 8px;
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                color: #40E0D0;
+                text-shadow: 0 0 5px rgba(64, 224, 208, 0.3);
+            }
+            50% {
+                color: #7FFFD4;
+                text-shadow: 0 0 10px rgba(127, 255, 212, 0.6);
+            }
+        }
+
+        .message-templates {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .template-btn {
+            background: linear-gradient(135deg, #4169E1, #8A2BE2);
+            color: #ffffff;
+            border: 2px solid #9370DB;
+            padding: 15px 20px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 15px;
-            margin: 5px;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            font-size: 14px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .modal-btn-close {
-            background: #64748b;
-            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+
+        .template-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
-        
-        .modal-btn:hover {
+
+        .template-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .template-btn:hover {
+            background: linear-gradient(135deg, #6495ED, #BA55D3);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .template-btn:active {
+            transform: scale(0.98);
+        }
+
+        .template-btn.selected {
+            background: linear-gradient(135deg, #9370DB, #DDA0DD);
+            border-color: #BA55D3;
+            animation: selectedPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes selectedPulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(186, 85, 211, 0.8);
+            }
+        }
+
+        .custom-message-area {
+            margin-top: 20px;
+        }
+
+        .custom-message-input {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 10px;
+            color: #E6E6FA;
+            padding: 15px;
+            font-size: 14px;
+            resize: vertical;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .custom-message-input:focus {
+            outline: none;
+            border-color: #BA55D3;
+            box-shadow: 0 0 20px rgba(186, 85, 211, 0.6);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn:active::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B6B, #FF1493);
+            color: white;
+            border: 2px solid #FF69B4;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 20, 147, 0.8);
+            }
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #FF1493, #FF69B4);
+            box-shadow: 0 5px 20px rgba(255, 20, 147, 0.6);
+            transform: translateY(-2px);
+            animation: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #333333, #555555);
+            color: #ff4444;
+            border: 2px solid #8B0000;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #555555, #777777);
             transform: translateY(-2px);
         }
-        
-        .template-section {
-            background: #f8fafc;
-            padding: 15px;
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(0, 128, 128, 0.2);
+            padding: 20px;
             border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3b82f6;
+            border: 1px solid rgba(64, 224, 208, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .template-header {
-            font-weight: 800;
-            color: #1e293b;
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(64, 224, 208, 0.3), transparent);
+            animation: featureWave 3s linear infinite;
+        }
+
+        @keyframes featureWave {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .feature-card:hover {
+            background: rgba(0, 128, 128, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
+        }
+
+        .feature-icon, .feature-title, .feature-desc {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            font-size: 2em;
             margin-bottom: 10px;
-            font-size: 16px;
         }
-        
-        .template-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 13px;
-            margin: 5px 5px 5px 0;
-            box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+
+        .feature-title {
+            color: #50C878;
+            font-weight: bold;
+            margin-bottom: 5px;
+            animation: titleShine 3s ease-in-out infinite;
         }
-        
-        .template-btn:hover {
-            transform: translateY(-1px);
+
+        @keyframes titleShine {
+            0%, 100% {
+                color: #50C878;
+                text-shadow: 0 0 5px rgba(80, 200, 120, 0.3);
+            }
+            50% {
+                color: #7FFFD4;
+                text-shadow: 0 0 15px rgba(127, 255, 212, 0.6);
+            }
         }
-        
-        .checkbox-row {
+
+        .feature-desc {
+            color: #40E0D0;
+            font-size: 0.9em;
+            animation: descFade 4s ease-in-out infinite;
+        }
+
+        @keyframes descFade {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .audio-controls {
             display: flex;
-            align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #e2e8f0;
+            gap: 10px;
+            margin-top: 15px;
         }
-        
-        .checkbox-row:hover {
-            background: #f8fafc;
-        }
-        
-        .checkbox-row input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        
-        .select-all-btn {
-            background: #8b5cf6;
+
+        .record-btn {
+            background: #8B0000;
             color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 700;
+            padding: 10px 20px;
+            border: 2px solid #DC143C;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
-            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .record-btn:hover {
+            background: #DC143C;
+        }
+
+        .record-btn.recording {
+            background: #ff0000;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .link-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #8B0000;
+            border-radius: 8px;
+            color: #ff4444;
+            margin-top: 10px;
+        }
+
+        .link-input:focus {
+            outline: none;
+            border-color: #DC143C;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        .status-message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(0, 128, 0, 0.3);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .status-message.error {
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid #ff0000;
+            color: #ff6666;
         }
     </style>
 </head>
 <body>
-
-<div id="loginOverlay">
-    <div class="login-box">
-        <img src="https://i.postimg.cc/9rn4BN6W/NFVT-Logo.jpg" style="width: 90px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.2);">
-        <h2 style="margin: 0 0 20px 0; font-size: 20px; color: #1e293b;">Team Followup Login</h2>
-        <input type="number" id="loginId" placeholder="Distributor ID" style="margin-bottom: 12px;">
-        <input type="text" id="loginName" placeholder="Your Name" style="margin-top: 0;">
-        <button onclick="checkLogin()" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; font-weight: 700; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);">Login</button>
+    <div class="black-overlay"></div>
+    <div class="network-background">
+        <canvas id="networkCanvas"></canvas>
     </div>
-</div>
-
-<div class="container" id="mainApp">
-    <div class="user-profile-bar">
-        <div class="user-details">
-            <div class="user-avatar" id="userInitial">U</div>
-            <div>
-                <div style="font-size: 16px; font-weight: 800;" id="displayUserName">User Name</div>
-                <div style="font-size: 12px; opacity: 0.9;" id="displayUserId">ID: 00000000</div>
-            </div>
+    
+    <div class="container">
+        <div class="header">
+            <img src="https://i.postimg.cc/XvTq85tC/Girish_S_small_size.jpg" alt="Girish S" class="profile-photo" id="profilePhoto">
+            <h1>Girish S</h1>
+            <p class="subtitle">Universal Crown Director of Vestige</p>
         </div>
-        <button onclick="location.reload()" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 8px 16px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 700; transition: all 0.3s ease;">Logout</button>
-    </div>
 
-    <div class="stats-summary" id="totalStats">Total Team PV: 0 | Members: 0 | Alerts: 0</div>
-
-    <div class="header-section">
-        <img src="https://i.postimg.cc/9rn4BN6W/NFVT-Logo.jpg" alt="NFVT Logo" class="team-logo">
-        <h1 class="luxury-gold-title">NFVT Team Followup</h1>
-    </div>
-
-    <div class="form-section">
-        <div class="grid-form">
-            <div class="input-group"><label>Member Name</label><input type="text" id="downlineName"></div>
-            <div class="input-group"><label>Mobile Number</label><input type="number" id="mobileNo" placeholder="Phone Number"></div>
-            <div class="input-group"><label>Distributor ID</label><input type="number" id="distId" placeholder="8 Digit ID"></div>
-            <div class="input-group">
-                <label>Level</label>
-                <select id="memberLevel">
-                    <option value="Distributor">Distributor</option>
-                    <option value="Senior Distributor">Senior Distributor</option>
-                    <option value="Bronze Director">Bronze Director</option>
-                    <option value="Silver Director">Silver Director</option>
-                    <option value="Gold Director">Gold Director</option>
-                    <option value="Star Director">Star Director</option>
-                    <option value="Diamond Director">Diamond Director</option>
-                    <option value="Crown Director">Crown Director</option>
-                    <option value="UCD">UCD</option>
-                </select>
-            </div>
-            <div class="input-group"><label>Self PV</label><input type="number" id="selfPV" placeholder="Self"></div>
-            <div class="input-group"><label>Group PV</label><input type="number" id="groupPV" placeholder="Group"></div>
-            <div class="input-group"><label>Date</label><input type="date" id="followUpDate"></div>
-            <div class="input-group"><label>100PV CNC</label><select id="consistency"><option value="Yes">Yes</option><option value="No">No</option></select></div>
-            <div class="input-group"><label>Meeting</label><select id="meeting"><option value="Yes">Yes</option><option value="No">No</option></select></div>
-            <button class="add-btn" onclick="addData()">➕ Add Member</button>
-        </div>
-    </div>
-
-    <div id="trashSection">
-        <h3 style="font-size: 16px; margin: 0 0 15px 0; color: #dc2626; font-weight: 800;">♻️ Deleted Members</h3>
-        <table style="background: transparent;"><tbody id="trashBody"></tbody></table>
-        <button onclick="toggleTrash()" style="font-size: 12px; cursor: pointer; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; margin-top: 10px; font-weight: 700;">Close Trash</button>
-        <button onclick="emptyTrash()" style="font-size: 12px; cursor: pointer; padding: 8px 16px; background: #7f1d1d; color: white; border: none; border-radius: 6px; margin-top: 10px; margin-left: 10px; font-weight: 700;">🗑️ Empty Trash (Permanent)</button>
-    </div>
-
-    <div class="action-bar">
-        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Search Name or ID...">
-        <div class="btn-group">
-            <button class="btn-wa-templates" onclick="openWATemplates()">📱 WA Templates</button>
-            <button class="btn-success" onclick="downloadCSV()">📊 Excel</button>
-            <button class="btn-danger" onclick="downloadPDF()">📄 PDF</button>
-            <button class="btn-trash" onclick="toggleTrash()">🗑️ Trash</button>
-        </div>
-    </div>
-
-    <div style="overflow-x: auto;">
-        <table>
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;"></th>
-                    <th>Member & ID</th>
-                    <th>Mobile</th>
-                    <th>Level</th>
-                    <th>Self PV</th>
-                    <th>Group PV</th>
-                    <th>Total PV</th>
-                    <th>Date</th>
-                    <th>100PV</th>
-                    <th>Meeting</th>
-                    <th>Status</th>
-                    <th>Act</th>
-                    <th>WA</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
-
-    <!-- PV Reminder Modal -->
-    <div id="reminderModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">⏰ PV Consistency Reminder!</div>
-            <div class="modal-body" id="modalMessage">
-                <!-- Dynamic content will be inserted here -->
-            </div>
-            <div style="text-align: center;">
-                <button class="modal-btn" onclick="sendReminders()">📱 Send WhatsApp Reminders</button>
-                <button class="modal-btn modal-btn-close" onclick="closeModal()">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- WhatsApp Templates Modal -->
-    <div id="waTemplatesModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header" style="color: #25D366;">📱 WhatsApp Message Templates</div>
-            <div class="modal-body">
-                <div id="selectedCount" style="background: #dbeafe; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: 700; color: #1e40af;">
-                    Selected: <span id="selectedCountNum">0</span> Members
+        <div class="main-content">
+            <!-- Left Panel - Contact Numbers -->
+            <div class="left-panel">
+                <h2 class="section-title">📱 Team Contact Numbers</h2>
+                <div class="number-input-area">
+                    <textarea id="numberInput" placeholder="Enter contact numbers (one per line)&#10;Example:&#10;9876543210&#10;9123456789&#10;&#10;You can edit this anytime!"></textarea>
+                    <p class="helper-text">💡 Enter one number per line. Numbers are editable anytime.</p>
                 </div>
 
-                <div class="template-section">
-                    <div class="template-header">📊 Group Follow-up Message</div>
-                    <button class="template-btn" onclick="sendGroupFollowup()">Send to Selected</button>
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎙️</div>
+                        <div class="feature-title">Voice Recording</div>
+                        <div class="feature-desc">Record audio messages</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📸</div>
+                        <div class="feature-title">Media Attachment</div>
+                        <div class="feature-desc">Attach images & files</div>
+                    </div>
                 </div>
 
-                <div class="template-section">
-                    <div class="template-header">⏰ PV Consistency Reminder (2nd-14th)</div>
-                    <button class="template-btn" onclick="sendConsistencyReminder()">Send to Selected</button>
-                </div>
-
-                <div class="template-section">
-                    <div class="template-header">🔔 Meeting Reminders</div>
-                    <button class="template-btn" onclick="sendMeetingReminder('1pm')">1:00 PM Meeting</button>
-                    <button class="template-btn" onclick="sendMeetingReminder('6pm')">6:00 PM Meeting</button>
-                    <button class="template-btn" onclick="sendMeetingReminder('8pm')">8:00 PM Meeting</button>
-                </div>
-
-                <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #f59e0b;">
-                    <strong style="color: #92400e;">💡 Tip:</strong> Meeting reminders are sent 10 minutes before scheduled time. Select members from the table above first!
+                <div class="audio-controls">
+                    <button class="record-btn" id="recordBtn">🎤 Record Audio</button>
+                    <button class="record-btn" id="stopBtn" style="display:none;">⏹️ Stop</button>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="modal-btn modal-btn-close" onclick="closeWATemplates()">Close</button>
+
+            <!-- Right Panel - Message Templates -->
+            <div class="right-panel">
+                <h2 class="section-title">💬 Message Templates</h2>
+                <div class="message-templates">
+                    <button class="template-btn" data-template="1">
+                        <strong>Template 1:</strong> Professional Network Introduction
+                    </button>
+                    <button class="template-btn" data-template="2">
+                        <strong>Template 2:</strong> Performance Motivation
+                    </button>
+                    <button class="template-btn" data-template="3">
+                        <strong>Template 3:</strong> Consistency Reminder (14th Closing)
+                    </button>
+                    <button class="template-btn" data-template="4">
+                        <strong>Template 4:</strong> Level Closing - TBB & LOB Focus
+                    </button>
+                    <button class="template-btn" data-template="5">
+                        <strong>Template 5:</strong> Training Attendance Reminder
+                    </button>
+                    <button class="template-btn" data-template="6">
+                        <strong>Template 6:</strong> Recruitment Excellence
+                    </button>
+                </div>
+
+                <div class="custom-message-area">
+                    <h3 style="color: #DC143C; margin-bottom: 10px;">✍️ Custom Message / Preview</h3>
+                    
+                    <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="language-btn active-lang" data-lang="en" style="padding: 8px 16px; background: linear-gradient(135deg, #4169E1, #8A2BE2); color: white; border: 2px solid #9370DB; border-radius: 8px; cursor: pointer; font-family: 'Cormorant Garamond', serif; transition: all 0.3s ease;">English</button>
+                        <button class="language-btn" data-lang="ta" style="padding: 8px 16px; background: linear-gradient(135deg, #FF6B6B, #FF1493); color: white; border: 2px solid #FF69B4; border-radius: 8px; cursor: pointer; font-family: 'Cormorant Garamond', serif; transition: all 0.3s ease; opacity: 0.6;">தமிழ் (Tamil)</button>
+                    </div>
+                    
+                    <textarea class="custom-message-input" id="customMessage" placeholder="Type your custom message here or select a template above to preview..."></textarea>
+                    
+                    <div style="margin-top: 15px;">
+                        <h4 style="color: #50C878; margin-bottom: 10px; font-size: 14px;">📎 Attachments</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                            <label for="imageAttachment" style="padding: 10px 20px; background: linear-gradient(135deg, #FF6B6B, #FF1493); color: white; border: 2px solid #FF69B4; border-radius: 8px; cursor: pointer; display: inline-block; font-size: 14px; transition: all 0.3s ease;">
+                                📸 Add Image
+                            </label>
+                            <input type="file" id="imageAttachment" accept="image/*" multiple style="display: none;">
+                            
+                            <label for="audioAttachment" style="padding: 10px 20px; background: linear-gradient(135deg, #50C878, #40E0D0); color: white; border: 2px solid #7FFFD4; border-radius: 8px; cursor: pointer; display: inline-block; font-size: 14px; transition: all 0.3s ease;">
+                                🎵 Add Audio
+                            </label>
+                            <input type="file" id="audioAttachment" accept="audio/*" multiple style="display: none;">
+                            
+                            <label for="docAttachment" style="padding: 10px 20px; background: linear-gradient(135deg, #4169E1, #8A2BE2); color: white; border: 2px solid #9370DB; border-radius: 8px; cursor: pointer; display: inline-block; font-size: 14px; transition: all 0.3s ease;">
+                                📄 Add Document
+                            </label>
+                            <input type="file" id="docAttachment" accept=".pdf,.doc,.docx,.txt" multiple style="display: none;">
+                        </div>
+                        <div id="attachmentList" style="color: #40E0D0; font-size: 12px; max-height: 100px; overflow-y: auto;"></div>
+                    </div>
+                    
+                    <button class="btn-secondary" id="saveCustomBtn" style="margin-top: 15px; padding: 10px 20px; width: 100%; background: linear-gradient(135deg, #4a0000, #660000); color: #ff6666; border: 2px solid #8B0000; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">
+                        💾 Save as Custom Template
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="sendBtn">📤 Send to All Selected Numbers</button>
+                    <button class="btn btn-secondary" id="clearBtn">🗑️ Clear All</button>
+                </div>
+
+                <div class="status-message" id="statusMessage"></div>
             </div>
         </div>
     </div>
 
-    <div class="branding-bar">
-        <div class="leader-card-inline">
-            <div class="profile-circle-small"><img src="https://i.postimg.cc/XvTq85tC/Girish-S.jpg"></div>
-            <div class="leader-info-small">
-                <p class="leader-name-small">Girish S</p>
-                <span class="leader-rank-small">Universal Crown Director of Vestige</span>
-                <span class="team-tag">DUCD Saravanan Team</span>
-            </div>
-        </div>
-        <img src="https://i.postimg.cc/PNWQDG2x/New-Logo.jpg" alt="Team Branding" class="inline-logo">
-    </div>
-</div>
-
-<script>
-    let selectedMembers = new Set();
-
-    function checkLogin() {
-        const id = document.getElementById('loginId').value;
-        const name = document.getElementById('loginName').value;
-        if(id.length >= 8 && name.trim() !== "") {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('displayUserName').innerText = name;
-            document.getElementById('displayUserId').innerText = "ID: " + id;
-            document.getElementById('userInitial').innerText = name.charAt(0).toUpperCase();
-            displayData();
-            checkMeetingReminders(); // Start checking for meeting times
-        } else {
-            alert("Please enter valid 8-digit ID and Name!");
-        }
-    }
-
-    window.onload = function() { 
-        document.getElementById('followUpDate').value = new Date().toISOString().split('T')[0];
-    };
-
-    function addData() {
-        const name = document.getElementById('downlineName').value;
-        const mobile = document.getElementById('mobileNo').value;
-        const distId = document.getElementById('distId').value;
-        const level = document.getElementById('memberLevel').value;
-        const selfPV = parseFloat(document.getElementById('selfPV').value) || 0;
-        const groupPV = parseFloat(document.getElementById('groupPV').value) || 0;
-        const totalPV = selfPV + groupPV;
-        const date = document.getElementById('followUpDate').value;
-        const consistency = document.getElementById('consistency').value;
-        const meeting = document.getElementById('meeting').value;
-
-        if (!name || distId.length < 8 || !mobile) { 
-            alert("⚠️ Please fill Name, ID (8 digits), and Mobile!"); 
-            return; 
-        }
-
-        const entry = { name, mobile, distId, level, selfPV, groupPV, totalPV, date, consistency, meeting, id: Date.now() };
-        let entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        entries.unshift(entry); 
-        localStorage.setItem('nfvt_ucd_v2', JSON.stringify(entries));
-        displayData();
-        
-        // Clear form
-        ['downlineName', 'mobileNo', 'distId', 'selfPV', 'groupPV'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('consistency').value = 'Yes';
-        document.getElementById('meeting').value = 'Yes';
-    }
-
-    function displayData() {
-        const tableBody = document.getElementById('tableBody');
-        const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        tableBody.innerHTML = '';
-        let totalTeamPV = 0;
-        let alertCount = 0;
-        let pvReminderList = [];
-        
-        // Check if we're in reminder period (2nd to 14th of month)
-        const today = new Date();
-        const dayOfMonth = today.getDate();
-        const isReminderPeriod = dayOfMonth >= 2 && dayOfMonth <= 14;
-        
-        entries.forEach(item => {
-            totalTeamPV += item.totalPV;
+    <script>
+        // Message Templates
+        const templates = {
+            1: `Hi, this is Girish S, Universal Crown Director of Vestige. You have been added to my network. In case of any Vestige business-related queries or support, please feel free to contact me at this number. Looking forward to working with you!`,
             
-            // Determine row class and status
-            let rowClass = '';
-            let statusBadges = '';
-            let waMessage = `Hello ${item.name}! 👋\n\n`;
+            2: `Hi! I've noticed your performance could use a boost. Let's push harder and work smarter to increase your income through PV, level advancement, meetings, and conference calls. Your potential is unlimited - let's unlock it together!`,
             
-            // Check for PV reminder during 2nd-14th
-            if (isReminderPeriod && item.selfPV < 100) {
-                statusBadges += '<span class="reminder-badge badge-pv-reminder">⏰ PV DUE</span>';
-                pvReminderList.push({name: item.name, mobile: item.mobile, selfPV: item.selfPV, needed: 100 - item.selfPV});
-            }
+            3: `🔔 Gentle Reminder: Consistency is key! Month closing is on the 14th. Please complete your PV and share this reminder with your team so they can do the same. Together we achieve more!`,
             
-            // Check for inactive ID (Self PV < 30)
-            if (item.selfPV < 30) {
-                rowClass = 'inactive-warning';
-                statusBadges += '<span class="reminder-badge badge-inactive">⚠️ INACTIVE</span>';
-                waMessage += `⚠️ *URGENT:* Your ID is INACTIVE!\nYou need to do *${30 - item.selfPV} more PV* to activate your ID.\n\n`;
-                alertCount++;
-            }
-            // Check for low PV (30-99)
-            else if (item.selfPV < 100) {
-                rowClass = 'low-pv-warning';
-                statusBadges += '<span class="reminder-badge badge-low-pv">📊 LOW PV</span>';
-                waMessage += `📊 Your Self PV is ${item.selfPV}. Keep pushing to reach 100 PV!\n\n`;
-                
-                // Add reminder about deadline if in reminder period
-                if (isReminderPeriod) {
-                    waMessage += `⏰ *REMINDER:* Complete 100 PV before 14th of this month!\nYou need *${100 - item.selfPV} more PV*.\n\n`;
-                }
-                alertCount++;
-            }
-            // High PV (>=100)
-            else {
-                rowClass = 'high-pv';
-            }
+            4: `⏰ Level Closing Time! Please focus on building your TBB (Team Building Bonus) and expanding your LOB (Line of Business) legs. This is crucial for your growth. Let's make this month count!`,
             
-            // Check for no consistency
-            if (item.consistency === "No") {
-                if (rowClass === '') rowClass = 'no-consistency';
-                statusBadges += '<span class="reminder-badge badge-inactive">❌ NO 100PV</span>';
-                waMessage += `⚠️ You need to maintain 100PV consistency!\n\n`;
-                alertCount++;
-            }
+            5: `📚 Training Reminder: I've noticed you haven't been attending our training sessions or following our WhatsApp updates. Consistent learning is essential for success. How can we achieve this level of income without putting in the work? Let's get back on track!`,
             
-            // Check for no meeting attendance
-            if (item.meeting === "No") {
-                if (rowClass === '' && item.selfPV >= 100) rowClass = 'no-meeting';
-                statusBadges += '<span class="reminder-badge badge-no-meeting">🔔 ATTEND MTG</span>';
-                waMessage += `🔔 *REMINDER:* Please attend daily meetings! Meetings are crucial for your growth.\n\n`;
-                alertCount++;
-            }
+            6: `🌟 Recruitment Excellence Update: Our team is doing phenomenally well in recruitment! We're using offline methods (visiting cards, posters) and online approaches effectively. Even members who aren't actively recruiting are benefiting from our team's growth. New achievers are emerging every month! Please focus on your recruitment efforts to be part of this success story. Your contribution matters!`
+        };
+
+        const templatesTamil = {
+            1: `வணக்கம், நான் கிரிஷ் எஸ், வெஸ்டீஜ் யுனிவர்சல் க்ரவுன் டைரக்டர். நீங்கள் என் நெட்வொர்க்கில் சேர்க்கப்பட்டுள்ளீர்கள். வெஸ்டீஜ் தொழில் தொடர்பான ஏதேனும் கேள்விகள் அல்லது ஆதரவிற்கு, தயவுசெய்து இந்த எண்ணில் என்னை தொடர்பு கொள்ளவும். உங்களுடன் இணைந்து பணியாற்ற ஆவலாக உள்ளேன்!`,
             
-            waMessage += `📈 *Current Stats:*\n`;
-            waMessage += `• Self PV: ${item.selfPV}\n`;
-            waMessage += `• Group PV: ${item.groupPV}\n`;
-            waMessage += `• Total PV: ${item.totalPV}\n\n`;
-            waMessage += `💪 Keep growing with Team NFVT!\n`;
-            waMessage += `🌟 Success is yours!`;
+            2: `வணக்கம்! உங்கள் செயல்திறனை மேம்படுத்த முடியும் என்று கவனித்தேன். PV, லெவல் முன்னேற்றம், கூட்டங்கள் மற்றும் கான்ஃபரன்ஸ் கால்கள் மூலம் உங்கள் வருமானத்தை அதிகரிக்க கடினமாக உழைப்போம். உங்கள் திறன் வரம்பற்றது - அதை ஒன்றாக திறப்போம்!`,
             
-            const waLink = `https://wa.me/91${item.mobile}?text=${encodeURIComponent(waMessage)}`;
+            3: `🔔 மென்மையான நினைவூட்டல்: நிலைத்தன்மை முக்கியம்! மாத முடிவு 14ம் தேதி. தயவுசெய்து உங்கள் PV ஐ முடித்து, உங்கள் குழுவினருடன் இந்த நினைவூட்டலைப் பகிரவும். ஒன்றாக நாம் அதிகம் சாதிக்கிறோம்!`,
             
-            const isSelected = selectedMembers.has(item.id);
+            4: `⏰ லெவல் க்ளோஸிங் நேரம்! தயவுசெய்து TBB (டீம் பில்டிங் போனஸ்) மற்றும் LOB (லைன் ஆஃப் பிஸினஸ்) கால்களை விரிவுபடுத்துவதில் கவனம் செலுத்தவும். இது உங்கள் வளர்ச்சிக்கு மிக முக்கியமானது. இந்த மாதத்தை எண்ணத்தக்கதாக ஆக்குவோம்!`,
             
-            tableBody.innerHTML += `<tr class="${rowClass}">
-                    <td><input type="checkbox" class="member-checkbox" data-id="${item.id}" ${isSelected ? 'checked' : ''} onchange="toggleMemberSelection(${item.id})"></td>
-                    <td><strong style="color: #1e293b;">${item.name}</strong><br><small style="color: #64748b;">${item.distId}</small></td>
-                    <td><strong>${item.mobile}</strong></td>
-                    <td><span style="background: #ddd6fe; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #5b21b6;">${item.level}</span></td>
-                    <td><strong style="color: ${item.selfPV >= 100 ? '#059669' : (item.selfPV >= 30 ? '#f59e0b' : '#dc2626')};">${item.selfPV}</strong></td>
-                    <td><strong style="color: #6366f1;">${item.groupPV}</strong></td>
-                    <td><strong style="font-size: 15px; color: #1e293b;">${item.totalPV}</strong></td>
-                    <td>${item.date}</td>
-                    <td><span style="background: ${item.consistency === 'Yes' ? '#dcfce7' : '#fee2e2'}; color: ${item.consistency === 'Yes' ? '#166534' : '#991b1b'}; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">${item.consistency}</span></td>
-                    <td><span style="background: ${item.meeting === 'Yes' ? '#dbeafe' : '#fef3c7'}; color: ${item.meeting === 'Yes' ? '#1e40af' : '#92400e'}; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">${item.meeting}</span></td>
-                    <td style="min-width: 120px;">${statusBadges || '<span style="color: #10b981; font-weight: 700;">✅ Good</span>'}</td>
-                    <td><button class="delete-btn" onclick="deleteEntry(${item.id})" title="Delete">❌</button></td>
-                    <td><a href="${waLink}" target="_blank" class="wa-link">📱 WA</a></td>
-                </tr>`;
-        });
-        
-        document.getElementById('totalStats').innerText = `Total Team PV: ${totalTeamPV.toFixed(2)} | Members: ${entries.length} | 🔔 Alerts: ${alertCount}`;
-        
-        // Show popup if in reminder period and there are members below 100 PV
-        if (isReminderPeriod && pvReminderList.length > 0) {
-            const lastShown = localStorage.getItem('lastReminderShown');
-            const todayStr = today.toDateString();
+            5: `📚 பயிற்சி நினைவூட்டல்: நீங்கள் எங்கள் பயிற்சி அமர்வுகளில் கலந்து கொள்ளவில்லை அல்லது எங்கள் வாட்ஸ்அப் புதுப்பிப்புகளைப் பின்பற்றவில்லை என்பதை கவனித்தேன். தொடர்ச்சியான கற்றல் வெற்றிக்கு அவசியம். வேலை செய்யாமல் இந்த அளவு வருமானத்தை எப்படி அடைய முடியும்? மீண்டும் தடத்திற்கு வருவோம்!`,
             
-            // Show popup only once per day
-            if (lastShown !== todayStr) {
-                showReminderPopup(pvReminderList);
-                localStorage.setItem('lastReminderShown', todayStr);
-            }
-        }
-        
-        updateSelectedCount();
-    }
+            6: `🌟 ஆட்சேர்ப்பு சிறப்பு புதுப்பிப்பு: எங்கள் குழு ஆட்சேர்ப்பில் அபாரமாக சிறப்பாக செயல்படுகிறது! ஆஃப்லைன் முறைகள் (விசிட்டிங் கார்டுகள், போஸ்டர்கள்) மற்றும் ஆன்லைன் அணுகுமுறைகளை திறம்பட பயன்படுத்துகிறோம். தீவிரமாக ஆட்சேர்ப்பு செய்யாத உறுப்பினர்கள் கூட எங்கள் குழுவின் வளர்ச்சியிலிருந்து பயனடைகிறார்கள். ஒவ்வொரு மாதமும் புதிய சாதனையாளர்கள் உருவாகிறார்கள்! இந்த வெற்றிக் கதையின் ஒரு பகுதியாக இருக்க உங்கள் ஆட்சேர்ப்பு முயற்சிகளில் கவனம் செலுத்தவும். உங்கள் பங்களிப்பு முக்கியம்!`
+        };
 
-    function toggleMemberSelection(id) {
-        if (selectedMembers.has(id)) {
-            selectedMembers.delete(id);
-        } else {
-            selectedMembers.add(id);
-        }
-        updateSelectedCount();
-    }
+        let selectedTemplate = null;
+        let currentLanguage = 'en';
+        let attachedFiles = [];
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
 
-    function toggleSelectAll() {
-        const selectAll = document.getElementById('selectAll');
-        const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        
-        if (selectAll.checked) {
-            entries.forEach(entry => selectedMembers.add(entry.id));
-        } else {
-            selectedMembers.clear();
-        }
-        
-        displayData();
-    }
-
-    function updateSelectedCount() {
-        const count = selectedMembers.size;
-        document.getElementById('selectedCountNum').innerText = count;
-    }
-
-    function deleteEntry(id) {
-        if(confirm("⚠️ Delete this member?")) {
-            let entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-            let trash = JSON.parse(localStorage.getItem('nfvt_trash')) || [];
-            const idx = entries.findIndex(e => e.id === id);
-            if (idx > -1) {
-                trash.push(entries[idx]); 
-                entries.splice(idx, 1);
-                localStorage.setItem('nfvt_ucd_v2', JSON.stringify(entries));
-                localStorage.setItem('nfvt_trash', JSON.stringify(trash));
-                selectedMembers.delete(id);
-                displayData();
-            }
-        }
-    }
-
-    function toggleTrash() {
-        const ts = document.getElementById('trashSection');
-        ts.style.display = (ts.style.display === 'none' || ts.style.display === '') ? 'block' : 'none';
-        if(ts.style.display === 'block') {
-            const trash = JSON.parse(localStorage.getItem('nfvt_trash')) || [];
-            document.getElementById('trashBody').innerHTML = trash.map(i => 
-                `<tr style="background: white;">
-                    <td><strong>${i.name}</strong></td>
-                    <td>${i.distId}</td>
-                    <td>
-                        <button onclick="restoreEntry(${i.id})" style="background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-right: 5px;">↩️ Restore</button>
-                        <button onclick="permanentDelete(${i.id})" class="perm-delete-btn">🗑️ Delete Forever</button>
-                    </td>
-                </tr>`
-            ).join('');
-        }
-    }
-
-    function restoreEntry(id) {
-        let entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        let trash = JSON.parse(localStorage.getItem('nfvt_trash')) || [];
-        const idx = trash.findIndex(e => e.id === id);
-        if (idx > -1) {
-            entries.unshift(trash[idx]); 
-            trash.splice(idx, 1);
-            localStorage.setItem('nfvt_ucd_v2', JSON.stringify(entries));
-            localStorage.setItem('nfvt_trash', JSON.stringify(trash));
-            displayData(); 
-            toggleTrash(); 
-            setTimeout(() => toggleTrash(), 100);
-        }
-    }
-
-    function permanentDelete(id) {
-        if(confirm("⚠️ PERMANENT DELETE!\n\nThis member will be deleted forever and cannot be recovered.\n\nAre you absolutely sure?")) {
-            let trash = JSON.parse(localStorage.getItem('nfvt_trash')) || [];
-            const idx = trash.findIndex(e => e.id === id);
-            if (idx > -1) {
-                trash.splice(idx, 1);
-                localStorage.setItem('nfvt_trash', JSON.stringify(trash));
-                toggleTrash();
-                setTimeout(() => toggleTrash(), 100);
-                alert("✅ Member permanently deleted!");
-            }
-        }
-    }
-
-    function emptyTrash() {
-        const trash = JSON.parse(localStorage.getItem('nfvt_trash')) || [];
-        if (trash.length === 0) {
-            alert("Trash is already empty!");
-            return;
-        }
-        
-        if(confirm(`⚠️ EMPTY TRASH - PERMANENT DELETE!\n\nThis will permanently delete all ${trash.length} members in trash.\nThis action CANNOT be undone!\n\nAre you absolutely sure?`)) {
-            localStorage.setItem('nfvt_trash', JSON.stringify([]));
-            toggleTrash();
-            alert("✅ Trash emptied! All members permanently deleted.");
-        }
-    }
-
-    function showReminderPopup(pvList) {
-        const modal = document.getElementById('reminderModal');
-        const message = document.getElementById('modalMessage');
-        
-        let content = `<strong style="color: #dc2626; font-size: 18px;">⏰ Monthly PV Reminder (2nd - 14th)</strong><br><br>`;
-        content += `<div style="text-align: left; background: #fef3c7; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #f59e0b;">`;
-        content += `<strong style="color: #92400e;">📋 ${pvList.length} Members need to complete 100 PV before 14th:</strong><br><br>`;
-        
-        pvList.forEach(member => {
-            content += `• <strong>${member.name}</strong> - Current: ${member.selfPV} PV | Needed: <strong style="color: #dc2626;">${member.needed} PV</strong><br>`;
-        });
-        
-        content += `</div>`;
-        content += `<p style="color: #475569; font-size: 14px;">Click below to send WhatsApp reminders to all members.</p>`;
-        
-        message.innerHTML = content;
-        modal.style.display = 'flex';
-        
-        // Store the list for sending reminders
-        window.currentReminderList = pvList;
-    }
-
-    function closeModal() {
-        document.getElementById('reminderModal').style.display = 'none';
-    }
-
-    function sendReminders() {
-        if (window.currentReminderList && window.currentReminderList.length > 0) {
-            let sentCount = 0;
-            
-            window.currentReminderList.forEach((member, index) => {
-                const message = `Hello ${member.name}! 👋\n\n` +
-                    `⏰ *MONTHLY PV REMINDER*\n\n` +
-                    `📅 Deadline: Before 14th of this month\n` +
-                    `📊 Your Current Self PV: ${member.selfPV}\n` +
-                    `🎯 Target: 100 PV\n` +
-                    `⚠️ Remaining: *${member.needed} PV*\n\n` +
-                    `💡 *Action Required:* Please complete your remaining ${member.needed} PV before the 14th to maintain your 100 PV consistency!\n\n` +
-                    `📞 Need help? Contact your upline today!\n\n` +
-                    `💪 Keep growing with Team NFVT!\n` +
-                    `🌟 Success is yours!`;
-                
-                const waLink = `https://wa.me/91${member.mobile}?text=${encodeURIComponent(message)}`;
-                
-                setTimeout(() => {
-                    window.open(waLink, '_blank');
-                }, index * 2000);
-                
-                sentCount++;
+        // Template Selection
+        document.querySelectorAll('.template-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTemplate = this.dataset.template;
+                const templateText = currentLanguage === 'ta' ? templatesTamil[selectedTemplate] : templates[selectedTemplate];
+                document.getElementById('customMessage').value = templateText;
             });
-            
-            alert(`📱 Opening WhatsApp for ${sentCount} members!\n\nEach message will open in a new tab with a 2-second delay.`);
-            closeModal();
-        }
-    }
-
-    // WhatsApp Templates Functions
-    function openWATemplates() {
-        if (selectedMembers.size === 0) {
-            alert("⚠️ Please select members from the table first!\n\nUse the checkboxes to select members.");
-            return;
-        }
-        document.getElementById('waTemplatesModal').style.display = 'flex';
-    }
-
-    function closeWATemplates() {
-        document.getElementById('waTemplatesModal').style.display = 'none';
-    }
-
-    function getSelectedMembersData() {
-        const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        return entries.filter(e => selectedMembers.has(e.id));
-    }
-
-    function sendGroupFollowup() {
-        const selected = getSelectedMembersData();
-        if (selected.length === 0) {
-            alert("No members selected!");
-            return;
-        }
-
-        selected.forEach((member, index) => {
-            const message = `Hello ${member.name}! 👋\n\n` +
-                `📊 *TEAM FOLLOW-UP UPDATE*\n\n` +
-                `📈 Your Performance:\n` +
-                `• Self PV: ${member.selfPV}\n` +
-                `• Group PV: ${member.groupPV}\n` +
-                `• Total PV: ${member.totalPV}\n` +
-                `• Level: ${member.level}\n\n` +
-                `${member.selfPV >= 100 ? '✅ Excellent! You have achieved 100 PV consistency!' : '⚠️ Please work on achieving 100 PV this month!'}\n\n` +
-                `${member.meeting === 'Yes' ? '✅ Great attendance at meetings!' : '🔔 Please attend daily meetings regularly!'}\n\n` +
-                `💡 *Next Steps:*\n` +
-                `• Focus on team building\n` +
-                `• Attend all training sessions\n` +
-                `• Follow up with your downline\n\n` +
-                `💪 Keep up the great work!\n` +
-                `🌟 Team NFVT is proud of you!`;
-
-            const waLink = `https://wa.me/91${member.mobile}?text=${encodeURIComponent(message)}`;
-            
-            setTimeout(() => {
-                window.open(waLink, '_blank');
-            }, index * 2000);
         });
 
-        alert(`📱 Sending Group Follow-up to ${selected.length} members!`);
-        closeWATemplates();
-    }
+        // Language Selection
+        document.querySelectorAll('.language-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.language-btn').forEach(b => {
+                    b.style.opacity = '0.6';
+                    b.style.transform = 'scale(1)';
+                    b.classList.remove('active-lang');
+                });
+                this.style.opacity = '1';
+                this.style.transform = 'scale(1.05)';
+                this.classList.add('active-lang');
+                
+                currentLanguage = this.dataset.lang;
+                
+                // Update current message if template is selected
+                if (selectedTemplate) {
+                    const templateText = currentLanguage === 'ta' ? templatesTamil[selectedTemplate] : templates[selectedTemplate];
+                    document.getElementById('customMessage').value = templateText;
+                }
+                
+                showStatus(`Language switched to ${currentLanguage === 'ta' ? 'Tamil (தமிழ்)' : 'English'}`, 'success');
+            });
+        });
 
-    function sendConsistencyReminder() {
-        const selected = getSelectedMembersData();
-        const today = new Date();
-        const dayOfMonth = today.getDate();
-        
-        if (dayOfMonth < 2 || dayOfMonth > 14) {
-            if (!confirm("⚠️ Note: Consistency reminders are typically sent between 2nd-14th of the month.\n\nDo you still want to send?")) {
+        // Function to update attachment list display
+        function updateAttachmentList() {
+            const listDiv = document.getElementById('attachmentList');
+            if (attachedFiles.length === 0) {
+                listDiv.innerHTML = '';
                 return;
             }
+            
+            let html = '<div style="margin-top: 5px;"><strong>Attached Files:</strong></div>';
+            attachedFiles.forEach((file, index) => {
+                const icon = file.type.startsWith('image/') ? '🖼️' : 
+                            file.type.startsWith('audio/') ? '🎵' : '📄';
+                html += `<div style="margin: 5px 0; padding: 5px; background: rgba(255,255,255,0.05); border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>${icon} ${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
+                    <button onclick="removeAttachment(${index})" style="background: #ff4444; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">✕</button>
+                </div>`;
+            });
+            listDiv.innerHTML = html;
         }
 
-        const needReminder = selected.filter(m => m.selfPV < 100);
+        // Remove attachment function
+        window.removeAttachment = function(index) {
+            attachedFiles.splice(index, 1);
+            updateAttachmentList();
+            showStatus('File removed', 'success');
+        };
+
+        // Image Attachment
+        document.getElementById('imageAttachment').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    attachedFiles.push(file);
+                }
+            });
+            updateAttachmentList();
+            showStatus(`${files.length} image(s) attached`, 'success');
+            this.value = '';
+        });
+
+        // Audio Attachment
+        document.getElementById('audioAttachment').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type.startsWith('audio/')) {
+                    attachedFiles.push(file);
+                }
+            });
+            updateAttachmentList();
+            showStatus(`${files.length} audio file(s) attached`, 'success');
+            this.value = '';
+        });
+
+        // Document Attachment
+        document.getElementById('docAttachment').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                attachedFiles.push(file);
+            });
+            updateAttachmentList();
+            showStatus(`${files.length} document(s) attached`, 'success');
+            this.value = '';
+        });
+
+        // Image Error Handling
+        document.getElementById('profilePhoto').addEventListener('error', function() {
+            this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect width="150" height="150" fill="%238B0000"/%3E%3Ctext x="50%25" y="50%25" font-size="60" fill="%23DC143C" text-anchor="middle" dy=".3em"%3EGS%3C/text%3E%3C/svg%3E';
+        });
+
+        // Send Messages
+        document.getElementById('sendBtn').addEventListener('click', function() {
+            const numbers = document.getElementById('numberInput').value.trim().split('\n').filter(n => n.trim());
+            const message = document.getElementById('customMessage').value.trim();
+            
+            if (numbers.length === 0) {
+                showStatus('Please enter at least one contact number!', 'error');
+                return;
+            }
+            
+            if (!message) {
+                showStatus('Please select a template or type a custom message!', 'error');
+                return;
+            }
+
+            let finalMessage = message;
+
+            if (attachedFiles.length > 0) {
+                finalMessage += '\n\n📎 Attachments:';
+                attachedFiles.forEach(file => {
+                    const icon = file.type.startsWith('image/') ? '🖼️' : 
+                                file.type.startsWith('audio/') ? '🎵' : '📄';
+                    finalMessage += `\n${icon} ${file.name}`;
+                });
+                showStatus(`Opening WhatsApp... Please manually attach ${attachedFiles.length} file(s)`, 'success');
+            }
+
+            // Open WhatsApp for each number
+            let successCount = 0;
+            numbers.forEach((number, index) => {
+                const cleanNumber = number.replace(/\D/g, '');
+                if (cleanNumber) {
+                    setTimeout(() => {
+                        const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(finalMessage)}`;
+                        window.open(whatsappUrl, '_blank');
+                        successCount++;
+                        
+                        if (index === numbers.length - 1) {
+                            showStatus(`✅ Opening WhatsApp for ${successCount} contact(s)!`, 'success');
+                        }
+                    }, index * 500);
+                }
+            });
+        });
+
+        // Clear All
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                document.getElementById('numberInput').value = '';
+                document.getElementById('customMessage').value = '';
+                attachedFiles = [];
+                updateAttachmentList();
+                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('selected'));
+                selectedTemplate = null;
+                showStatus('All fields cleared!', 'success');
+            }
+        });
+
+        // Audio Recording
+        document.getElementById('recordBtn').addEventListener('click', async function() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.addEventListener('dataavailable', event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener('stop', () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // Create a File object from the Blob
+                    const audioFile = new File([audioBlob], `voice-message-${Date.now()}.wav`, { type: 'audio/wav' });
+                    
+                    // Add to attachments
+                    attachedFiles.push(audioFile);
+                    updateAttachmentList();
+                    
+                    // Also offer download
+                    const a = document.createElement('a');
+                    a.href = audioUrl;
+                    a.download = audioFile.name;
+                    a.click();
+                    
+                    showStatus('Voice message recorded and added to attachments!', 'success');
+                });
+
+                mediaRecorder.start();
+                this.style.display = 'none';
+                document.getElementById('stopBtn').style.display = 'block';
+                document.getElementById('stopBtn').classList.add('recording');
+                isRecording = true;
+            } catch (err) {
+                showStatus('Microphone access denied!', 'error');
+            }
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', function() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                this.style.display = 'none';
+                this.classList.remove('recording');
+                document.getElementById('recordBtn').style.display = 'block';
+                isRecording = false;
+            }
+        });
+
+        // Sticker Click - REMOVED
+
+        // Save Custom Template
+        document.getElementById('saveCustomBtn').addEventListener('click', function() {
+            const customMsg = document.getElementById('customMessage').value.trim();
+            if (!customMsg) {
+                showStatus('Please enter a message to save!', 'error');
+                return;
+            }
+            
+            const templateNum = Object.keys(templates).length + 1;
+            templates[templateNum] = customMsg;
+            
+            // Create new template button
+            const templatesDiv = document.querySelector('.message-templates');
+            const newBtn = document.createElement('button');
+            newBtn.className = 'template-btn';
+            newBtn.dataset.template = templateNum;
+            newBtn.innerHTML = `<strong>Template ${templateNum}:</strong> Custom Message (Saved)`;
+            newBtn.addEventListener('click', function() {
+                document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTemplate = this.dataset.template;
+                document.getElementById('customMessage').value = templates[selectedTemplate];
+            });
+            templatesDiv.appendChild(newBtn);
+            
+            showStatus('✅ Custom message saved as Template ' + templateNum + '!', 'success');
+        });
+
+        // Status Message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = 'status-message ' + type;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Network Animation Canvas
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
         
-        if (needReminder.length === 0) {
-            alert("All selected members have already achieved 100 PV!");
-            return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = 2.5;
+                this.color = this.randomColor();
+            }
+
+            randomColor() {
+                const colors = [
+                    '#FFD700', // Gold
+                    '#50C878', // Emerald
+                    '#40E0D0', // Turquoise
+                    '#9370DB', // Purple
+                    '#FF6B6B', // Coral
+                    '#4169E1'  // Royal Blue
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
         }
 
-        needReminder.forEach((member, index) => {
-            const needed = 100 - member.selfPV;
-            const message = `Hello ${member.name}! 👋\n\n` +
-                `⏰ *PV CONSISTENCY REMINDER*\n\n` +
-                `📅 *Important Deadline:* Complete before 14th!\n\n` +
-                `📊 Your Current Status:\n` +
-                `• Self PV: ${member.selfPV}\n` +
-                `• Target: 100 PV\n` +
-                `• Remaining: *${needed} PV*\n\n` +
-                `⚠️ *Action Required:*\n` +
-                `Please complete your remaining *${needed} PV* before the 14th of this month to maintain 100 PV consistency!\n\n` +
-                `💡 *Why 100 PV Matters:*\n` +
-                `• Maintains active status\n` +
-                `• Ensures business growth\n` +
-                `• Qualifies for bonuses\n\n` +
-                `📞 Need product suggestions? Contact your upline!\n\n` +
-                `💪 You can do it!\n` +
-                `🌟 Team NFVT believes in you!`;
-
-            const waLink = `https://wa.me/91${member.mobile}?text=${encodeURIComponent(message)}`;
-            
-            setTimeout(() => {
-                window.open(waLink, '_blank');
-            }, index * 2000);
-        });
-
-        alert(`📱 Sending Consistency Reminder to ${needReminder.length} members who need to complete PV!`);
-        closeWATemplates();
-    }
-
-    function sendMeetingReminder(time) {
-        const selected = getSelectedMembersData();
-        if (selected.length === 0) {
-            alert("No members selected!");
-            return;
+        const nodes = [];
+        const nodeCount = 100;
+        
+        for (let i = 0; i < nodeCount; i++) {
+            nodes.push(new Node());
         }
 
-        let meetingTime, meetingLabel;
-        switch(time) {
-            case '1pm':
-                meetingTime = '1:00 PM';
-                meetingLabel = 'Afternoon';
-                break;
-            case '6pm':
-                meetingTime = '6:00 PM';
-                meetingLabel = 'Evening';
-                break;
-            case '8pm':
-                meetingTime = '8:00 PM';
-                meetingLabel = 'Night';
-                break;
-        }
+        function drawConnections() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-        selected.forEach((member, index) => {
-            const message = `Hello ${member.name}! 👋\n\n` +
-                `🔔 *MEETING REMINDER*\n\n` +
-                `⏰ ${meetingLabel} Meeting starts in 10 minutes!\n` +
-                `🕐 Time: ${meetingTime}\n\n` +
-                `📍 *Important:*\n` +
-                `Please join the meeting on time. Daily meetings are crucial for:\n` +
-                `• Learning new strategies\n` +
-                `• Team motivation\n` +
-                `• Business updates\n` +
-                `• Success stories\n\n` +
-                `💡 *Don't miss this opportunity!*\n\n` +
-                `See you in the meeting!\n` +
-                `🌟 Team NFVT`;
-
-            const waLink = `https://wa.me/91${member.mobile}?text=${encodeURIComponent(message)}`;
-            
-            setTimeout(() => {
-                window.open(waLink, '_blank');
-            }, index * 2000);
-        });
-
-        alert(`📱 Sending ${meetingTime} Meeting Reminder to ${selected.length} members!`);
-        closeWATemplates();
-    }
-
-    // Auto Meeting Reminder System
-    function checkMeetingReminders() {
-        setInterval(() => {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            
-            // Check if it's 10 minutes before meeting time
-            const shouldRemind = 
-                (hours === 12 && minutes === 50) || // 10 min before 1 PM
-                (hours === 17 && minutes === 50) || // 10 min before 6 PM
-                (hours === 19 && minutes === 50);   // 10 min before 8 PM
-            
-            if (shouldRemind) {
-                const lastReminder = localStorage.getItem('lastMeetingReminder');
-                const currentTime = `${hours}:${minutes}`;
-                
-                if (lastReminder !== currentTime) {
-                    const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-                    const noMeetingMembers = entries.filter(e => e.meeting === 'No');
-                    
-                    if (noMeetingMembers.length > 0 && confirm(`🔔 It's 10 minutes before the meeting!\n\nSend reminder to ${noMeetingMembers.length} members who are not attending meetings regularly?`)) {
-                        noMeetingMembers.forEach(m => selectedMembers.add(m.id));
+                    if (distance < 160) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
                         
-                        let time;
-                        if (hours === 12) time = '1pm';
-                        else if (hours === 17) time = '6pm';
-                        else if (hours === 19) time = '8pm';
+                        // Multi-color gradient connection
+                        const opacity = (1 - distance / 160) * 0.6;
+                        const gradient = ctx.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
                         
-                        sendMeetingReminder(time);
+                        const color1 = nodes[i].color;
+                        const color2 = nodes[j].color;
+                        
+                        gradient.addColorStop(0, color1 + Math.floor(opacity * 255).toString(16).padStart(2, '0'));
+                        gradient.addColorStop(1, color2 + Math.floor(opacity * 255).toString(16).padStart(2, '0'));
+                        
+                        ctx.strokeStyle = gradient;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
                     }
-                    
-                    localStorage.setItem('lastMeetingReminder', currentTime);
                 }
             }
-        }, 60000); // Check every minute
-    }
-
-    function filterTable() {
-        const q = document.getElementById("searchInput").value.toUpperCase();
-        const r = document.getElementById("tableBody").getElementsByTagName("tr");
-        for (let row of r) { 
-            row.style.display = row.innerText.toUpperCase().includes(q) ? "" : "none"; 
         }
-    }
 
-    function downloadCSV() {
-        const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        let csv = "Name,ID,Mobile,Level,SelfPV,GroupPV,TotalPV,Date,100PV_CNC,Meeting\n";
-        entries.forEach(e => csv += `"${e.name}","${e.distId}","${e.mobile}","${e.level}","${e.selfPV}","${e.groupPV}","${e.totalPV}","${e.date}","${e.consistency}","${e.meeting}"\n`);
-        const b = new Blob([csv], {type:'text/csv'});
-        const a = document.createElement('a'); 
-        a.href=URL.createObjectURL(b); 
-        a.download=`NFVT_Report_${new Date().toISOString().split('T')[0]}.csv`; 
-        a.click();
-    }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawConnections();
+            
+            nodes.forEach(node => {
+                node.update();
+                node.draw();
+            });
 
-    function downloadPDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        
-        doc.setFontSize(18);
-        doc.setTextColor(191, 149, 63);
-        doc.text("NFVT Team Followup Report", 14, 15);
-        
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
-        
-        const entries = JSON.parse(localStorage.getItem('nfvt_ucd_v2')) || [];
-        
-        const totalPV = entries.reduce((sum, e) => sum + e.totalPV, 0);
-        const alerts = entries.filter(e => e.selfPV < 30 || e.meeting === 'No').length;
-        doc.text(`Total Members: ${entries.length} | Team PV: ${totalPV.toFixed(2)} | Alerts: ${alerts}`, 14, 29);
-        
-        const rows = entries.map(e => [
-            e.name, 
-            e.distId, 
-            e.mobile, 
-            e.selfPV, 
-            e.groupPV,
-            e.totalPV, 
-            e.consistency,
-            e.meeting,
-            e.selfPV < 30 ? 'INACTIVE' : (e.selfPV < 100 ? 'LOW PV' : 'OK')
-        ]);
-        
-        doc.autoTable({ 
-            head: [['Name', 'ID', 'Mobile', 'Self', 'Group', 'Total', '100PV', 'Mtg', 'Status']], 
-            body: rows, 
-            startY: 35,
-            styles: { fontSize: 8 },
-            headStyles: { fillColor: [30, 41, 59] }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
+
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 25000);
+        }
+
+        // Create particles continuously
+        setInterval(createParticle, 300);
         
-        doc.save(`NFVT_Report_${new Date().toISOString().split('T')[0]}.pdf`);
-    }
-</script>
+        // Create initial batch
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+    
+    </script>
 </body>
 </html>
